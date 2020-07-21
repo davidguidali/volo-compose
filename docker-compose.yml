@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+        - "27017:27017"
+
+    volumes:
+        - mongodata:C:/data/db
+
+  volo-opcua-server:
+    image: volo-opcua-server
+    ports:
+        - "7718:7718"
+    depends_on: 
+        - mongodb
+
+  volo-controller:
+    image: volo-controller
+    depends_on: 
+        - volo-opcua-server
+
+volumes:
+    mongodata:
