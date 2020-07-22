@@ -18,6 +18,8 @@ services:
 
   volo-controller:
     image: volo-controller
+    ports:
+        - "60123:50051"
     depends_on: 
         - volo-opcua-server
 
