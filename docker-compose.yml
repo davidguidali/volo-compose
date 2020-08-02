@@ -3,14 +3,17 @@ version: "3.8"
 services:
   mongodb:
     image: mongo
-    ports:
-        - "27017:27017"
-
+    container_name: mongo
+    networks:
+        - volo
     volumes:
         - mongodata:C:/data/db
 
   volo-opcua-server:
     image: volo-opcua-server
+    container_name: volo-opcua-server
+    networks:
+        - volo
     ports:
         - "7718:7718"
     depends_on: 
@@ -18,10 +21,26 @@ services:
 
   volo-controller:
     image: volo-controller
-    ports:
-        - "60123:50051"
+    container_name: volo-controller
+    networks:
+      - volo
     depends_on: 
-        - volo-opcua-server
+      - volo-opcua-server
+
+  volo-api:
+    image: volo-api
+    container_name: volo-api
+    networks:
+        - volo
+    ports:
+        - "5000:80"
+    depends_on: 
+        - volo-controller
 
 volumes:
     mongodata:
+
+networks:
+    volo:
+        name: volo
+        driver: nat
